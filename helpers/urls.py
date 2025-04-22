@@ -1,0 +1,8 @@
+BASE_URL = "https://stellarburgers.nomoreparties.site/api"
+CREATE_USER_URL = f"{BASE_URL}/auth/register"
+LOGIN_USER_URL = f"{BASE_URL}/auth/login"
+DELETE_USER_URL = f"{BASE_URL}/auth/user"
+GET_USER_URL = f"{BASE_URL}/auth/user"
+CHANGING_USER_URL = f"{BASE_URL}/auth/user"
+CREATE_ORDER_URL = f"{BASE_URL}/orders"
+GET_ORDER_USER = f"{BASE_URL}/orders"
