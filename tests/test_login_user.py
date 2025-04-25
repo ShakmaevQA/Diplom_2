@@ -12,7 +12,8 @@ class TestLogin:
     def test_valid_user(self, create_and_delete_user):
         user, token = create_and_delete_user
         headers = {"Authorization": token}
-        response = requests.get(GET_USER_URL, headers=headers)
+        with allure.step(f"GET запрос на {GET_USER_URL} с валидным токеном"):
+            response = requests.get(GET_USER_URL, headers=headers)
         assert response.status_code == 200
 
     @allure.title("Логин с неверным логином и паролем")
@@ -21,7 +22,7 @@ class TestLogin:
             "email": "пупу",
             "password": "ляля"
         }
-        response = requests.post(LOGIN_USER_URL, data=success_data)
+        with allure.step(f"POST запрос на {LOGIN_USER_URL} с неверными данными"):
+            response = requests.post(LOGIN_USER_URL, data=success_data)
         assert response.status_code == 401
         assert response.json()["success"] is False, "Поле success не False"
-

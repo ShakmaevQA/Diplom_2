@@ -48,6 +48,16 @@ class Data:
         }
         return result
 
+    @staticmethod
+    def create_test_user():
+        success_data = {
+            "email": "petuxfm@yandex.ru",
+            "password": "123456",
+            "name": "petuxfm@yandex.ru"
+        }
+        return success_data
+
+
 
 
 

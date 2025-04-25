@@ -16,7 +16,8 @@ class TestUserManagement:
             "email": user["email"]
         }
         headers = {'Authorization': f'{token}'}
-        response = requests.patch(CHANGING_USER_URL, data=success_data, headers=headers)
+        with allure.step(f"PATCH запрос на {CHANGING_USER_URL} для изменения email"):
+            response = requests.patch(CHANGING_USER_URL, data=success_data, headers=headers)
         assert response.status_code == 200, f"Ошибка: {response.text}"
         assert response.json()["success"] is True, "Поле success не True"
 
@@ -27,9 +28,10 @@ class TestUserManagement:
             "password": user["password"]
         }
         headers = {'Authorization': f'{token}'}
-        response = requests.patch(CHANGING_USER_URL, data=success_data, headers=headers)
+        with allure.step(f"PATCH запрос на {CHANGING_USER_URL} для изменения пароля"):
+            response = requests.patch(CHANGING_USER_URL, data=success_data, headers=headers)
         assert response.status_code == 200, f"Ошибка: {response.text}"
-        assert response.json()["success"] == True, "Поле success не True"
+        assert response.json()["success"] is True, "Поле success не True"
 
     @allure.title("C авторизацией: name")
     def test_changind_with_name(self, create_and_delete_user):
@@ -38,7 +40,8 @@ class TestUserManagement:
             "name": user["name"]
         }
         headers = {'Authorization': f'{token}'}
-        response = requests.patch(CHANGING_USER_URL, data=success_data, headers=headers)
+        with allure.step(f"PATCH запрос на {CHANGING_USER_URL} для изменения имени"):
+            response = requests.patch(CHANGING_USER_URL, data=success_data, headers=headers)
         assert response.status_code == 200, f"Ошибка: {response.text}"
         assert response.json()["success"] is True, "Поле success не True"
 
@@ -47,7 +50,8 @@ class TestUserManagement:
         success_data = {
             "email": Data.create_email_user()
         }
-        response = requests.patch(CHANGING_USER_URL, data=success_data)
+        with allure.step(f"PATCH запрос на {CHANGING_USER_URL} для изменения email без авторизации"):
+            response = requests.patch(CHANGING_USER_URL, data=success_data)
         assert response.status_code == 401, f"Ошибка: {response.text}"
         assert response.json()["message"] == "You should be authorised", "Поле 'message' не 'You should...'"
 
@@ -56,15 +60,17 @@ class TestUserManagement:
         success_data = {
             "password": "Пупа"
         }
-        response = requests.patch(CHANGING_USER_URL, data=success_data)
+        with allure.step(f"PATCH запрос на {CHANGING_USER_URL} для изменения пароля без авторизации"):
+            response = requests.patch(CHANGING_USER_URL, data=success_data)
         assert response.status_code == 401, f"Ошибка: {response.text}"
         assert response.json()["message"] == "You should be authorised", "Поле 'message' не 'You should...'"
 
-    @allure.title("Без авторизациии: password")
+    @allure.title("Без авторизациии: name")
     def test_logaut_changind_with_name(self):
         success_data = {
             "name": "Пупа"
         }
-        response = requests.patch(CHANGING_USER_URL, data=success_data)
+        with allure.step(f"PATCH запрос на {CHANGING_USER_URL} для изменения имени без авторизации"):
+            response = requests.patch(CHANGING_USER_URL, data=success_data)
         assert response.status_code == 401, f"Ошибка: {response.text}"
         assert response.json()["message"] == "You should be authorised", "Поле 'message' не 'You should...'"

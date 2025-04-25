@@ -15,7 +15,8 @@ class TestCreateOrder:
         ingredients = Data.create_order_ingredients()
         success_data = {"ingredients": ingredients}
         headers = {'Authorization': f'{token}'}
-        response = requests.post(CREATE_ORDER_URL, data=success_data, headers=headers)
+        with allure.step(f"POST запрос на {CREATE_ORDER_URL} с авторизацией"):
+            response = requests.post(CREATE_ORDER_URL, data=success_data, headers=headers)
         assert response.status_code == 200
         assert response.json()["success"] is True
 
@@ -23,7 +24,8 @@ class TestCreateOrder:
     def test_create_order_logaut(self):
         ingredients = Data.create_order_ingredients()
         success_data = {"ingredients": ingredients}
-        response = requests.post(CREATE_ORDER_URL, data=success_data)
+        with allure.step(f"POST запрос на {CREATE_ORDER_URL} без авторизации"):
+            response = requests.post(CREATE_ORDER_URL, data=success_data)
         assert response.status_code == 200
         assert response.json()["success"] is True
 
@@ -31,13 +33,15 @@ class TestCreateOrder:
     def test_create_order_with_ingredients(self):
         ingredients = Data.create_order_ingredients_more_two()
         success_data = {"ingredients": ingredients}
-        response = requests.post(CREATE_ORDER_URL, data=success_data)
+        with allure.step(f"POST запрос на {CREATE_ORDER_URL} с ингредиентами"):
+            response = requests.post(CREATE_ORDER_URL, data=success_data)
         assert response.status_code == 200
         assert response.json()["success"] is True
 
     @allure.title("Без ингридиентов")
     def test_create_order_without_ingredients(self):
-        response = requests.post(CREATE_ORDER_URL)
+        with allure.step(f"POST запрос на {CREATE_ORDER_URL} без ингредиентов"):
+            response = requests.post(CREATE_ORDER_URL)
         assert response.status_code == 400
         assert response.json()["message"] == "Ingredient ids must be provided"
 
@@ -45,7 +49,7 @@ class TestCreateOrder:
     def test_create_order_invalid_hash(self):
         # Формируем тело с невалидным хэшем
         payload = {"ingredients": "invalid_hash"}
-        response = requests.post(CREATE_ORDER_URL, data=payload)
-        print(f"Status: {response.status_code}, Response: {response.text}")  # Отладка
+        with allure.step(f"POST запрос на {CREATE_ORDER_URL} с невалидным хэшем"):
+            response = requests.post(CREATE_ORDER_URL, data=payload)
         assert response.status_code == 400, f"Ожидался статус 400, получен {response.status_code}: {response.text}"
         assert "One or more ids provided are incorrect" in response.text, f"Ожидалось 'One or more ids provided are incorrect' в теле ответа: {response.text}"
